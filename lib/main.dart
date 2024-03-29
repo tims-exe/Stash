@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stash/home.dart';
 
 void main() {
   runApp(const MyApp());
+
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.leanBack,
+  );
 }
 
 class MyApp extends StatelessWidget {
