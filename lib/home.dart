@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:stash/expenses.dart';
+import 'package:stash/newexpense.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
 
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 70,
         ),
         //header
@@ -140,7 +141,15 @@ class _HomePageState extends State<HomePage> {
                         right: 85,
                       ),
                       child: TextButton(
-                        onPressed: () => {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return const newExpense();
+                              },
+                            ),
+                          );
+                        },
                         style: TextButton.styleFrom(
                           foregroundColor: textLight,
                           backgroundColor: Color.fromRGBO(232, 218, 229, 0.7),
