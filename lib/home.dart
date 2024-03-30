@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     const textDark = Color.fromRGBO(19, 7, 12, 1);
-    const secondaryColor = Color.fromRGBO(107, 77, 87, 1);
+    const secondaryColor = Color.fromRGBO(97, 77, 107, 1);
     const textLight = Color.fromRGBO(232, 218, 229, 1);
     const bgColor = Color.fromRGBO(232, 218, 229, 1);
 
@@ -111,7 +111,8 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Expanded(
+                    Container(
+                      height: 350,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: ListView.builder(
@@ -135,8 +136,8 @@ class _HomePageState extends State<HomePage> {
                     ),*/
                     Padding(
                       padding: const EdgeInsets.only(
-                        top: 30,
-                        bottom: 15,
+                        top: 40,
+                        //bottom: 15,
                         left: 85,
                         right: 85,
                       ),

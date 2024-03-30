@@ -8,14 +8,24 @@ class newExpense extends StatefulWidget {
 }
 
 class _newExpenseState extends State<newExpense> {
+  bool isSpent = false;
+  bool isReceived = false;
+  var first = 1;
+
   @override
   Widget build(BuildContext context) {
     const bgColor = Color.fromRGBO(232, 218, 229, 1);
     const textDark = Color.fromRGBO(19, 7, 12, 1);
     const textRed = Color.fromRGBO(255, 0, 0, 1);
     const textGreen = Color.fromRGBO(24, 209, 76, 1);
+    const transparent = Color.fromRGBO(0, 0, 0, 0);
+    /*
+    var spentText = Color.fromRGBO(255, 0, 0, 1);
+    var receivedText = Color.fromRGBO(24, 209, 76, 1);
+    */
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         color: bgColor,
         child: Column(
@@ -82,16 +92,29 @@ class _newExpenseState extends State<newExpense> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   OutlinedButton(
-                    onPressed: () {
-                      debugPrint('spent');
-                    },
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: textRed, width: 2),
+                      backgroundColor: isSpent ? textRed : bgColor,
+                      side: const BorderSide(
+                        color: textRed,
+                        width: 2,
+                      ),
                     ),
-                    child: const Text(
+                    onPressed: () {
+                      setState(() {
+                        if (isSpent == false) {
+                          isSpent = !isSpent;
+                          if (first > 1) {
+                            isReceived = !isReceived;
+                          }
+                          first++;
+                        }
+                      });
+                      debugPrint(first.toString());
+                    },
+                    child: Text(
                       'Spent',
                       style: TextStyle(
-                        color: textRed,
+                        color: isSpent ? bgColor : textRed,
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w600,
                       ),
@@ -99,15 +122,25 @@ class _newExpenseState extends State<newExpense> {
                   ),
                   OutlinedButton(
                     onPressed: () {
-                      debugPrint('received');
+                      setState(() {
+                        if (isReceived == false) {
+                          isReceived = !isReceived;
+                          if (first > 1) {
+                            isSpent = !isSpent;
+                          }
+                          first++;
+                        }
+                      });
+                      debugPrint(first.toString());
                     },
                     style: OutlinedButton.styleFrom(
+                      backgroundColor: isReceived ? textGreen : bgColor,
                       side: BorderSide(color: textGreen, width: 2),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Recieved',
                       style: TextStyle(
-                        color: textGreen,
+                        color: isReceived ? bgColor : textGreen,
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w600,
                       ),
@@ -141,29 +174,26 @@ class _newExpenseState extends State<newExpense> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 40),
+              padding: EdgeInsets.only(top: 40, left: 30, right: 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ElevatedButton(
+                  IconButton(
                     onPressed: () {
+                      setState(() {
+                        Navigator.of(context).pop();
+                      });
                       debugPrint('cancelled');
                     },
-                    style: TextButton.styleFrom(
-                      backgroundColor: textRed,
-                      minimumSize: const Size.fromHeight(50),
-                    ),
-                    child: Text('Cancel'),
+                    icon: Icon(Icons.close),
+                    iconSize: 50,
                   ),
-                  ElevatedButton(
+                  IconButton(
                     onPressed: () {
-                      debugPrint('Saved');
+                      debugPrint('saved');
                     },
-                    style: TextButton.styleFrom(
-                      backgroundColor: textDark,
-                      minimumSize: const Size.fromHeight(50),
-                    ),
-                    child: Text('Save'),
+                    icon: Icon(Icons.check),
+                    iconSize: 50,
                   ),
                 ],
               ),
