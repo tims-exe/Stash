@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:stash/database.dart';
 
 class newExpense extends StatefulWidget {
   const newExpense({super.key});
@@ -8,9 +10,30 @@ class newExpense extends StatefulWidget {
 }
 
 class _newExpenseState extends State<newExpense> {
+  final _myBox = Hive.box('TestBox');
+  StashDatabase db = new StashDatabase();
+
+  final amtController = TextEditingController();
+
   bool isSpent = false;
   bool isReceived = false;
   var first = 1;
+  var currentDate;
+  var date = '';
+
+  @override
+  void initState() {
+    db.loadData();
+    currentDate = DateTime.now();
+    super.initState();
+  }
+
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +41,6 @@ class _newExpenseState extends State<newExpense> {
     const textDark = Color.fromRGBO(19, 7, 12, 1);
     const textRed = Color.fromRGBO(255, 0, 0, 1);
     const textGreen = Color.fromRGBO(24, 209, 76, 1);
-    const transparent = Color.fromRGBO(0, 0, 0, 0);
-    /*
-    var spentText = Color.fromRGBO(255, 0, 0, 1);
-    var receivedText = Color.fromRGBO(24, 209, 76, 1);
-    */
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -153,6 +171,7 @@ class _newExpenseState extends State<newExpense> {
               padding: const EdgeInsets.only(top: 20, left: 40, right: 40),
               child: TextField(
                 cursorColor: textDark,
+                controller: amtController,
                 decoration: InputDecoration(
                   labelText: 'Amount',
                   labelStyle: const TextStyle(
@@ -183,14 +202,28 @@ class _newExpenseState extends State<newExpense> {
                       setState(() {
                         Navigator.of(context).pop();
                       });
-                      debugPrint('cancelled');
                     },
                     icon: Icon(Icons.close),
                     iconSize: 50,
                   ),
                   IconButton(
                     onPressed: () {
-                      debugPrint('saved');
+                      setState(() {
+                        if (isNumeric(amtController.text)) {
+                          int index = db.StashList.length;
+                          print(index);
+
+                          date =
+                              '${currentDate.day}/${currentDate.month}/${currentDate.year}';
+                          db.StashList.add([
+                            ['Test'],
+                            [amtController.text],
+                            [date]
+                          ]);
+                        } else {
+                          print('Not numeric');
+                        }
+                      });
                     },
                     icon: Icon(Icons.check),
                     iconSize: 50,

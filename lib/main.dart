@@ -3,12 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:stash/home.dart';
 
-void main() async {
+void main() async{
 
   await Hive.initFlutter();
 
   var box = await Hive.openBox('TestBox');
-
   runApp(const MyApp());
 
   SystemChrome.setEnabledSystemUIMode(

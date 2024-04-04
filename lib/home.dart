@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:stash/database.dart';
 import 'package:stash/expenses.dart';
 import 'package:stash/newexpense.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +14,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _myBox = Hive.box('TestBox');
+  StashDatabase db = StashDatabase();
+
+  @override
+  void initState() {
+    db.loadData();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     const textDark = Color.fromRGBO(19, 7, 12, 1);
@@ -117,23 +129,26 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.only(top: 10),
                         child: ListView.builder(
                           physics: const BouncingScrollPhysics(),
-                          itemCount: 10,
+                          reverse: true,
+                          itemCount: db.StashList.length,
                           itemBuilder: (context, index) {
-                            return const expenseCard();
+                            return expenseCard(
+                              name: db.StashList[index][0],
+                              amt: db.StashList[index][1],
+                              date: db.StashList[index][2],
+                              onDelete: (context) {
+                                setState(() {
+                                  db.StashList = [];
+                                  db.updateDatabase();
+                                });
+                              },
+                            );
                           },
                         ),
                       ),
                     ),
-                    /*
-                    SizedBox(
-                      height: 70,
-                      child: IconButton(
-                        onPressed: () => {},
-                        icon: const Image(
-                          image: AssetImage('assets/add_icon.png'),
-                        ),
-                      ),
-                    ),*/
+
+                    // new expense button
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 40,
